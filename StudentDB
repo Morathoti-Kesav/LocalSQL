@@ -1,0 +1,111 @@
+CREATE TABLE BANK (
+    Addr VARCHAR(30) NOT NULL,
+    Code INT PRIMARY KEY,
+    BankName VARCHAR(30)
+);
+
+CREATE TABLE BANKBRANCH (
+    Code INT NOT NULL,
+    BranchNo INT, 
+    Addr VARCHAR(30),
+    PRIMARY KEY (BranchNo, Code),
+    FOREIGN KEY (Code) REFERENCES BANK(Code)
+);
+
+CREATE TABLE LOANS (
+    BranchNo INT NOT NULL,
+    Code INT NOT NULL,
+    LoanNo INT NOT NULL,
+    Amount INT NOT NULL,
+    LoanType VARCHAR(30),
+    PRIMARY KEY (LoanNo), 
+    FOREIGN KEY (BranchNo, Code) REFERENCES BANKBRANCH(BranchNo, Code) 
+);
+
+CREATE TABLE CUSTOMER (
+    Phone INT NOT NULL,
+    SSN INT PRIMARY KEY,
+    CustomerName VARCHAR(30) NOT NULL,
+    Addr VARCHAR(30)
+);
+
+CREATE TABLE ACCOUNT (
+    BranchNo INT NOT NULL,
+    Code INT NOT NULL,
+    AccNo INT NOT NULL,
+    AccType VARCHAR(30) NOT NULL,
+    Balance INT NOT NULL,
+    PRIMARY KEY (BranchNo, AccNo),
+    FOREIGN KEY (BranchNo, Code) REFERENCES BANKBRANCH(BranchNo, Code)
+);
+
+CREATE TABLE CustAcc (
+    SSN INT NOT NULL,
+    AccNo INT NOT NULL,
+    BranchNo INT NOT NULL,
+    PRIMARY KEY (SSN, AccNo, BranchNo),
+    FOREIGN KEY (SSN) REFERENCES CUSTOMER(SSN),
+    FOREIGN KEY (BranchNo, AccNo) REFERENCES ACCOUNT(BranchNo, AccNo)
+);
+
+CREATE TABLE CustLoan (
+    SSN INT NOT NULL,
+    BranchNo INT NOT NULL,
+    LoanNo INT NOT NULL,
+    PRIMARY KEY (SSN, BranchNo, LoanNo), 
+    FOREIGN KEY (SSN) REFERENCES CUSTOMER(SSN), 
+    FOREIGN KEY (LoanNo) REFERENCES LOANS(LoanNo) 
+);
+
+INSERT INTO BANK (Code, BankName, Addr) VALUES 
+(1, 'State Bank of India', 'Mumbai HQ'),
+(2, 'HDFC Bank', 'Mumbai Worli'),
+(3, 'ICICI Bank', 'Bandra Kurla Complex');
+
+
+INSERT INTO BANKBRANCH (BranchNo, Code, Addr) VALUES 
+(101, 1, 'Connaught Place, Delhi'),
+(102, 1, 'Mall Road, Shimla'),
+(101, 2, 'MG Road, Bengaluru'),
+(201, 2, 'Salt Lake, Kolkata'),
+(301, 3, 'Aminabad, Lucknow');
+
+
+INSERT INTO LOANS (BranchNo, Code, LoanNo, Amount, LoanType) VALUES 
+(101, 1, 50001, 500000, 'Home Loan'),
+(101, 2, 50002, 150000, 'Car Loan'),
+(301, 3, 50003, 30000, 'Personal Loan');
+
+INSERT INTO CUSTOMER (SSN, CustomerName, Phone, Addr) VALUES 
+(1001, 'Aarav Sharma', 987654321, 'Park Street, Kolkata'),
+(1002, 'Diya Patel', 912345678, 'Indiranagar, Bengaluru'),
+(1003, 'Kabir Singh', 998877665, 'Hazratganj, Lucknow'),
+(1004, 'Ananya Iyer', 955512345, 'Adyar, Chennai');
+
+INSERT INTO ACCOUNT (BranchNo, Code, AccNo, AccType, Balance) VALUES 
+(101, 1, 11001, 'Savings', 75000),
+(101, 1, 11002, 'Current', 250000),
+(101, 2, 22001, 'Savings', 12000),
+(301, 3, 33001, 'Savings', 95000);
+
+
+INSERT INTO CustAcc (SSN, BranchNo, AccNo) VALUES 
+(1001, 101, 11001), -- Aarav holds a Savings account at SBI Delhi
+(1002, 101, 22001), -- Diya holds a Savings account at HDFC Bengaluru
+(1003, 301, 33001), -- Kabir holds a Savings account at ICICI Lucknow
+(1001, 101, 11002); -- Aarav also holds a Current account at SBI Delhi (Joint/Second account)
+
+
+INSERT INTO CustLoan (SSN, BranchNo, LoanNo) VALUES 
+(1001, 101, 50001), -- Aarav takes a Home Loan from SBI Delhi
+(1002, 101, 50002), -- Diya takes a Car Loan from HDFC Bengaluru
+(1004, 301, 50003); -- Ananya takes a Personal Loan from ICICI Lucknow
+
+
+SELECT * FROM BANK;
+SELECT * FROM BANKBRANCH;
+SELECT * FROM CUSTOMER;
+SELECT * FROM LOANS;
+SELECT * FROM ACCOUNT;
+SELECT * FROM CustAcc;
+SELECT * FROM CustLoan;
