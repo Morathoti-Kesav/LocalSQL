@@ -24,7 +24,6 @@ SELECT * FROM Employee;
 SELECT * FROM Employee
 WHERE dept_no= 'D10';
 
-DROP TABLE Employee;
 
 UPDATE Employee 
 SET emp_addr='Nagpur'
@@ -33,12 +32,23 @@ WHERE emp_no = 'E005';
 SELECT * FROM Employee
 WHERE dept_name = 'HR';
 
+ALTER TABLE Employee
+ADD COLUMN emp_email VARCHAR(30);
+
+UPDATE Employee SET emp_email = 'amit.s@company.com' WHERE emp_no = 'E001';
+UPDATE Employee SET emp_email = 'priya.p@company.com' WHERE emp_no = 'E002';
+UPDATE Employee SET emp_email = 'rohan.d@company.com' WHERE emp_no = 'E003';
+UPDATE Employee SET emp_email = 'ananya.r@company.com' WHERE emp_no = 'E004';
+UPDATE Employee SET emp_email = 'suresh.k@company.com' WHERE emp_no = 'E005';
+
+
 UPDATE Employee
-SET job_id = NULL
+SET emp_email = NULL
 WHERE emp_name = 'Amit Sharma';
 
 SELECT * FROM Employee
 WHERE dept_name = 'IT';
 
 SELECT * FROM Employee;
+
 
